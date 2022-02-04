@@ -1,0 +1,38 @@
+name: UhcPlugin
+main: com.github.mennokemp.uhcplugin.plugins.UhcPlugin
+version: 1.0
+api-version: 1.13
+
+commands:
+   StartUhc:
+      description: Starts UHC.
+      usage: /<command>
+      permission: uhc.admin
+   CancelUhc:
+      description: Cancels UHC.
+      usage: /<command>
+      permission: uhc.admin
+   StopUhc:
+      description: Stops UHC.
+      usage: /<command>
+      permission: uhc.admin
+   HealPlayer:
+      description: Heals a player by the given amount.
+      usage: /<command> <player> <healamount>
+      permission: uhc.admin
+   RevivePlayer:
+      description: Revives a player and respawns them with a teammate or at the death location.
+      usage: /<command> <player>
+      permission: uhc.admin
+   StartFlood:
+      description: TODO
+      usage: /<command>
+      permission: uhc.admin
+   StopFlood:
+      description: TODO
+      usage: /<command>
+      permission: uhc.admin
+      
+permissions:
+    uhc.admin:
+        default: op

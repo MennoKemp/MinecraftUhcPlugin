@@ -1,0 +1,23 @@
+Advancements	1	0	1
+ChallengingBiomes	0	0	1
+EternalDayStart	120	0
+FloodHeight	80	-63	319
+FloodInitialLevel	-63	-63	319
+FloodInterval	5	0
+FloodStart	180	0
+FloodLava	0	0	1
+Freezing	0	0	1
+FriendlyFire	0	0	1
+MaxHealth	20	0
+NaturalRegeneration 0	0	1
+PlayerCollision	0	1	2
+PortalRatio	1	0
+ShowHealth	1	0	1
+ShowNameTags	0	0	1
+ReviveHealth	50	0	100
+Teams	1	0	1
+Weather	1	0	1
+WorldBorderFinalRadius	50	1
+WorldBorderInitialRadius	2000 1
+WorldBorderShrinkStart	60	0
+WorldBorderShrinkEnd	180	0
