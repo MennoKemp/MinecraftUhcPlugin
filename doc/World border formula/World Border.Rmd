@@ -1,0 +1,11 @@
+---
+title: "Graph with Slider"
+output: html_document
+runtime: shiny
+---
+
+```{r, echo=FALSE}
+shinyAppFile <- 'graph_app.R'
+runApp(shinyAppFile, display.mode = 'normal')
+
+```
