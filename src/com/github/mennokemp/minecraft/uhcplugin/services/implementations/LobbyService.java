@@ -1,9 +1,9 @@
 package com.github.mennokemp.minecraft.uhcplugin.services.implementations;
 
 import java.nio.file.Path;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,6 +13,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import com.github.mennokemp.minecraft.pluginhelpers.logging.ClassLogger;
 import com.github.mennokemp.minecraft.uhcplugin.domain.world.Realm;
@@ -34,19 +36,19 @@ public class LobbyService implements ILobbyService
 	private final IWorldService worldService;
 	
 	private final Plugin plugin;
-	
+	private final Scoreboard scoreboard;
 	private final ClassLogger logger;
 	
 	private final World lobbyWorld;
 	
-	public LobbyService(IWorldService worldService, Plugin plugin, ClassLogger logger)
+	public LobbyService(IWorldService worldService, Plugin plugin, Scoreboard scoreboard, ClassLogger logger)
 	{
 		logger.logInfo("Creating instance.");
 		
 		this.worldService = worldService;
 		
 		this.plugin = plugin;
-		
+		this.scoreboard = scoreboard;
 		this.logger = logger;
 		
 		lobbyWorld = worldService.getWorld(Realm.Lobby);
@@ -83,6 +85,8 @@ public class LobbyService implements ILobbyService
 		
 		setLobbyRules();
 		
+		createTeams();
+		
 		logger.logInfo("Lobby created.");
 	}
 	
@@ -98,15 +102,17 @@ public class LobbyService implements ILobbyService
 		logger.logInfo("Writing lobby signs.");
 		
 		WriteSign(0, "", "Welcome to UHC!");
-		WriteSign(2, "Can you find", "the following", "blocks?");
-		WriteSign(3, "Ancient Debris", "Bone", "Diamond Ore", "Prismarine");
+		WriteSign(1, "Join a team by", "clicking one of", "the buttons or", "play solo!");
+		
+		WriteSign(3, "", "While you wait for", "the game to start");
+		WriteSign(4, "", "can you find", "the following", "blocks?");
+		WriteSign(5, "Ancient Debris", "Bone", "Diamond Ore", "Prismarine");
 	}
 	
-	private void WriteSign(int offset, String... lines)
+	private void WriteSign(int column, String... lines)
 	{
-		World lobby = worldService.getWorld(Realm.Lobby);
-		Location signLocation = worldService.getLocation(Realm.Lobby, LobbyLocation).add(SignOffset).subtract(offset, 0, 0);
-		Block block = lobby.getBlockAt(signLocation);
+		Location signLocation = worldService.getLocation(Realm.Lobby, LobbyLocation).add(SignOffset).subtract(column, 0, 0);
+		Block block = lobbyWorld.getBlockAt(signLocation);
 		block.setType(Material.OAK_WALL_SIGN);
 		Sign sign = (Sign)block.getState();
 		SignSide side = sign.getSide(Side.FRONT);
@@ -115,5 +121,37 @@ public class LobbyService implements ILobbyService
 			side.setLine(l, lines[l]);
 		
 		sign.update(true);
+	}
+	
+	private void createTeams()
+	{
+		logger.logInfo("Creating teams.");
+		
+		scoreboard.getTeams().forEach(t -> t.unregister());
+		
+		createTeam("Black", ChatColor.BLACK);
+		createTeam("Gray", ChatColor.DARK_GRAY);
+		createTeam("Silver", ChatColor.GRAY);
+		createTeam("White", ChatColor.WHITE);
+		
+		createTeam("Purple", ChatColor.DARK_PURPLE);
+		createTeam("Blue", ChatColor.DARK_BLUE);
+		createTeam("Azure", ChatColor.BLUE);
+		createTeam("Cyan", ChatColor.AQUA);
+		
+		createTeam("Pink", ChatColor.RED);
+		createTeam("Magenta", ChatColor.LIGHT_PURPLE);
+		createTeam("Red", ChatColor.DARK_RED);
+		createTeam("Orange", ChatColor.GOLD);
+		
+		createTeam("Yellow", ChatColor.YELLOW);
+		createTeam("Lime", ChatColor.GREEN);
+		createTeam("Green", ChatColor.DARK_GREEN);
+	}
+	
+	private void createTeam(String name, ChatColor color)
+	{
+		Team team = scoreboard.registerNewTeam(name);
+		team.setColor(color);
 	}
 }
