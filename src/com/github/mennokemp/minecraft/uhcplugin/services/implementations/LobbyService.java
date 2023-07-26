@@ -4,18 +4,21 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.plugin.Plugin;
 
+import com.github.mennokemp.minecraft.pluginhelpers.logging.ClassLogger;
 import com.github.mennokemp.minecraft.uhcplugin.domain.world.Realm;
 import com.github.mennokemp.minecraft.uhcplugin.services.abstractions.ILobbyService;
 import com.github.mennokemp.minecraft.uhcplugin.services.abstractions.world.IWorldService;
+
 import com.github.shynixn.structureblocklib.api.bukkit.StructureBlockLibApi;
 
 public class LobbyService implements ILobbyService
@@ -32,18 +35,26 @@ public class LobbyService implements ILobbyService
 	
 	private final Plugin plugin;
 	
+	private final ClassLogger logger;
+	
 	private final World lobbyWorld;
 	
-	public LobbyService(IWorldService worldService, Plugin plugin)
+	public LobbyService(IWorldService worldService, Plugin plugin, ClassLogger logger)
 	{
+		logger.logInfo("Creating instance.");
+		
 		this.worldService = worldService;
 		
 		this.plugin = plugin;
+		
+		this.logger = logger;
 		
 		lobbyWorld = worldService.getWorld(Realm.Lobby);
 		
 		if(lobbyWorld.getBlockAt(worldService.getLocation(Realm.Lobby, LobbyLocation).add(BeaconOffset)).getType() != Material.BEACON)
 			createLobby();
+		
+		logger.logInfo("Instance created.");
 	}
 	
 	@Override
@@ -55,7 +66,7 @@ public class LobbyService implements ILobbyService
 	@Override
 	public void createLobby()
 	{
-		plugin.getLogger().log(Level.INFO, "Creating lobby...");
+		logger.logInfo("Creating lobby.");
 		
 		Path structurePath = plugin.getDataFolder().toPath().resolve(LobbyStructureName);
 
@@ -66,23 +77,26 @@ public class LobbyService implements ILobbyService
 			.at(worldService.getLocation(Realm.Lobby, lobbyLocation))
 			.includeEntities(true)
 			.loadFromPath(structurePath)
-			.onException(e -> plugin.getLogger().log(Level.SEVERE, "Failed to create lobby.", e))
-			.onResult(e -> plugin.getLogger().log(Level.INFO, ChatColor.GREEN + "Created lobby."));
+			.onException(e -> logger.logError("Failed to create lobby.", e));
 				
 		Bukkit.getScheduler().runTaskLater(plugin, () -> writeSigns(), 20);
 		
 		setLobbyRules();
 		
-		plugin.getLogger().log(Level.INFO, "Lobby created.");
+		logger.logInfo("Lobby created.");
 	}
 	
 	private void setLobbyRules()
 	{
+		logger.logInfo("Setting lobby rules.");
+		
 		lobbyWorld.setGameRule(GameRule.DO_MOB_SPAWNING, false);
 	}
 	
 	private void writeSigns()
 	{
+		logger.logInfo("Writing lobby signs.");
+		
 		WriteSign(0, "", "Welcome to UHC!");
 		WriteSign(2, "Can you find", "the following", "blocks?");
 		WriteSign(3, "Ancient Debris", "Bone", "Diamond Ore", "Prismarine");
@@ -95,9 +109,10 @@ public class LobbyService implements ILobbyService
 		Block block = lobby.getBlockAt(signLocation);
 		block.setType(Material.OAK_WALL_SIGN);
 		Sign sign = (Sign)block.getState();
-
-//		for (int l = 0; l < lines.length && l < 4; l++) 
-//			sign.setLine(l, lines[l]);
+		SignSide side = sign.getSide(Side.FRONT);
+		
+		for (int l = 0; l < lines.length && l < 4; l++) 
+			side.setLine(l, lines[l]);
 		
 		sign.update(true);
 	}

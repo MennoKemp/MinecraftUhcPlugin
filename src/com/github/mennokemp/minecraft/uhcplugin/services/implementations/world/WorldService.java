@@ -40,7 +40,7 @@ public class WorldService implements IWorldService
 	private static double SpawnSearchInterval = 100;
 	private static int SpawnAttempts = 100;
 
-	private static final String LobbyName = "lobby";
+	private static final String LobbyName = "world_lobby";
 	private static final String OverworldName = "world";
 	private static final String NetherName = "world_nether";
 	private static final String EndName = "world_the_end";
@@ -262,7 +262,7 @@ public class WorldService implements IWorldService
 
 	private void createLobbyWorld()
 	{
-		WorldCreator worldCreator = new WorldCreator(Realm.Lobby.name());
+		WorldCreator worldCreator = new WorldCreator(LobbyName);
 		worldCreator.environment(Environment.NORMAL);
 		worldCreator.type(WorldType.NORMAL);
 		worldCreator.createWorld();

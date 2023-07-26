@@ -2,7 +2,8 @@ package com.github.mennokemp.minecraft.uhcplugin.domain.game;
 
 public enum GameSetting 
 {
-	//	Set to 1 to show advancements to other players.
+	//	0 - Advancements are hidden from other players.
+	//	1 - Advancements are shown to other players.
 	Advancements,
 	//	Set to 1 to allow players to spawn in biomes defined in the challenging biomes list.
 	ChallengingBiomes,

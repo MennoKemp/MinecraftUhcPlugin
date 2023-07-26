@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Scoreboard;
 
+import com.github.mennokemp.minecraft.pluginhelpers.logging.ClassLogger;
 import com.github.mennokemp.minecraft.uhcplugin.commands.implementations.game.CancelUhcCommand;
 import com.github.mennokemp.minecraft.uhcplugin.commands.implementations.game.StartFloodCommand;
 import com.github.mennokemp.minecraft.uhcplugin.commands.implementations.game.StartUhcCommand;
@@ -76,7 +77,7 @@ public class InjectionModule
     	IServerService serverService = register(IServerService.class, new ServerService());
     	IStatisticsService statisticsService = register(IStatisticsService.class, new StatisticsService());
     	IWorldService worldService = register(IWorldService.class, new WorldService(settingDao, gameStateDao, plugin));
-    	ILobbyService lobbyService = register(ILobbyService.class, new LobbyService(worldService, plugin));
+    	ILobbyService lobbyService = register(ILobbyService.class, new LobbyService(worldService, plugin, createLogger(LobbyService.class)));
     	IPlayerService playerService = register(IPlayerService.class, new PlayerService(settingDao, gameStateDao, serverService, statisticsService, worldService, lobbyService, plugin, scoreboard));
     	IGameService2 gameService = register(IGameService2.class, new GameService2(settingDao, gameStateDao, serverService, statisticsService, worldService, playerService, plugin));
     	IGameStateService gameStateService = register(IGameStateService.class, new GameStateService(gameStateDao, worldService, plugin));
@@ -93,5 +94,10 @@ public class InjectionModule
     {
     	bindings.put(abstraction, implementation);
     	return implementation;
+    }
+    
+    private <T> ClassLogger createLogger(Class<T> caller)
+    {
+    	return new ClassLogger(plugin.getLogger(), caller.getSimpleName());
     }
 }
