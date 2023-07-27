@@ -2,9 +2,10 @@
 - Configurable settings are displayed as `<Setting>`.
 
 ## Features
+- A lobby (world) is automatically created where players can join before the game starts.
+  - Teams are created for players to join.
 
 ## Planned
-- A lobby (world) is automatically created where players can join before the game starts.
 - Players can either play solo or in teams.
   - Friendly fire is off `<FriendlyFire>`.
   - During the `<PveDuration>`, pvp is turned off.
@@ -22,7 +23,7 @@
   - Teammates can revive each other by right clicking a gravestone (and sacrificing a golden apple) `<AllowRevival>`.
   - After revival you will have `<RevivedLife>` health.
 - Advancements can be turned off with `<Advancements>` to hide information from other players.
-- Players are attempted to be spawned along a circle with radius `<SpawnRadius>`.
+- Players are spawned along a circle with radius `<SpawnRadius>`.
   - Teams are evenly spaced out along the circle.
   - Teammates spawn together.
   - If a spawn happens to be in a challenging biome (water, snow, etc) a new spawn point is searched for radially.

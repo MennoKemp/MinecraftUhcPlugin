@@ -16,6 +16,8 @@ public interface IWorldService
 			
 	Location getLocation(Realm realm, Location location);
 	
+	Location getLocation(Realm realm, double x, double y, double z);
+	
 	Map<Team, Location> getSpawnLocations(List<Team> teams);
 	
 	Location getRespawnLocation(Location location);

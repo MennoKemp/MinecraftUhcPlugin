@@ -105,9 +105,15 @@ public class WorldService implements IWorldService
 	}
 
 	@Override
-	public Location getLocation(Realm worldType, Location location)
+	public Location getLocation(Realm realm, Location location)
 	{		
-		return new Location(getWorld(worldType), location.getX(), location.getY(), location.getZ());
+		return new Location(getWorld(realm), location.getX(), location.getY(), location.getZ());
+	}
+	
+	@Override
+	public Location getLocation(Realm realm, double x, double y, double z)
+	{	
+		return new Location(getWorld(realm), x, y, z);
 	}
 
 	@Override
